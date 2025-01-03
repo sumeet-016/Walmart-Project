@@ -30,8 +30,8 @@ ALTER TABLE sales ADD COLUMN time_of_day VARCHAR(20);
 UPDATE sales
 SET time_of_day = (
 	CASE
-		WHEN `time` BETWEEN "00:00:00" AND "12:00:00" THEN "Morning"
-        WHEN `time` BETWEEN "12:01:00" AND "16:00:00" THEN "Afternoon"
+		WHEN `time` BETWEEN "00:00:00" AND "11:59:59" THEN "Morning"
+        WHEN `time` BETWEEN "12:00:00" AND "15:59:59" THEN "Afternoon"
         ELSE "Evening"
     END
 );
@@ -117,23 +117,23 @@ ORDER BY cogs DESC;
 
 -- What product line had the largest revenue?
 SELECT product_line, 
-SUM(total) AS total_product_revenue
+ROUND(SUM(total), 2) AS total_product_revenue
 FROM sales
 GROUP BY product_line
 ORDER BY total_product_revenue DESC; 
 
--- Answer :- 56144.8440 (Food and beverages).
+-- Answer :- 56144.84 (Food and beverages).
 
 
 -- What is the city with the largest revenue?
 SELECT city, branch,
-SUM(total) AS total_revenue
+ROUND(SUM(total), 2) AS total_revenue
 FROM sales
 GROUP BY city, branch
 ORDER BY total_revenue DESC
 LIMIT 1;
 
--- Answer :- 110490.7755 (Naypyitaw, Branch C).
+-- Answer :- 110490.78 (Naypyitaw, Branch C).
 
 
 -- What product line had the largest VAT(tax_pct)?
@@ -143,7 +143,7 @@ FROM sales
 GROUP BY city
 ORDER BY avg_tax DESC;
 
--- Answer :- Naypyitaw(Product line had the largest tax_pct).
+-- Answer :- Naypyitaw (Product line had the largest tax_pct).
 
 
 -- Fetch each product line and add a column to those product line showing "Good", "Bad". Good if its greater than average sales?
@@ -203,34 +203,34 @@ ORDER BY total_sales DESC;
 
 -- Which of the customer types brings the most revenue?
 SELECT customer_type,
-SUM(total) AS sum_of_total_revenue
+ROUND(SUM(total), 2) AS sum_of_total_revenue
 FROM sales
 GROUP BY customer_type
 ORDER BY sum_of_total_revenue DESC
 LIMIT 1;
 
--- Answer :- Members(163625.1015).
+-- Answer :- Members(163625.10).
 
 
 -- Which city has the largest tax percentage?
 SELECT city,
-SUM(tax_pct) AS total_sum_of_tax_percentage
+ROUND(SUM(tax_pct), 2) AS total_sum_of_tax_percentage
 FROM sales
 GROUP BY city 
 ORDER BY total_sum_of_tax_percentage DESC
 LIMIT 1;
 
--- Answer :- Naypyitaw(5261.4655).
+-- Answer :- Naypyitaw(5261.47).
 
 
 -- Which customer type pays the most in tax_percentage?
 SELECT customer_type,
-SUM(tax_pct) AS total_taxpct
+ROUND(SUM(tax_pct), 2) AS total_taxpct
 FROM sales
 GROUP BY customer_type
 ORDER BY total_taxpct;
 
--- Answer :- Normal(7488.6330).
+-- Answer :- Normal(7488.63).
 
 -- -------------------------------------------------------------------------------------
 -- -------------------------------------------------------------------------------------
@@ -263,12 +263,12 @@ LIMIT 1;
 
 -- Which customer type buys the most?
 SELECT customer_type,
-SUM(total) AS sum_of_total
+ROUND(SUM(total), 2) AS sum_of_total
 FROM sales
 GROUP BY customer_type
 ORDER BY sum_of_total DESC;
 
--- Answer :- Member(163625.1015).
+-- Answer :- Member(163625.10).
 
 
 -- What is the gender of most of the customers?
@@ -292,12 +292,12 @@ ORDER BY branch, count DESC;
 
 -- Which time of the day do customers give most ratings?
 SELECT time_of_day,
-AVG(rating) AS average_rating
+ROUND(AVG(rating), 2) AS average_rating
 FROM sales
 GROUP BY time_of_day
 ORDER BY average_rating DESC;
 
--- Answer :- Afternoon(7.02340).
+-- Answer :- Afternoon(7.02).
 
 
 -- Which time of the day do customers give most ratings per branch?
@@ -326,7 +326,7 @@ GROUP BY day_name, branch
 ORDER BY average_rating DESC;
 
 -- Answer :- On friday(A), monday(B) and saturday(C) are the top 3 days of the week that
--- --------- have the best ratings per branch-------------------------------------------
+-- have the best ratings per branch ----------------------------------------------------
 
 
 -- -------------------------------------------------------------------------------------
